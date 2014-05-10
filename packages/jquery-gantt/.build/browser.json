@@ -1,0 +1,22 @@
+{
+  "format": "unipackage-slice-pre1",
+  "packageVariables": [],
+  "uses": [
+    {
+      "package": "meteor"
+    },
+    {
+      "package": "jquery"
+    }
+  ],
+  "resources": [
+    {
+      "type": "prelink",
+      "file": "browser/packages/jquery-gantt.js",
+      "length": 225491,
+      "offset": 0,
+      "servePath": "/packages/jquery-gantt.js",
+      "sourceMap": "browser/packages/jquery-gantt.js.map"
+    }
+  ]
+}

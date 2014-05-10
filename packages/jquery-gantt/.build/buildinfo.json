@@ -1,0 +1,42 @@
+{
+  "builtBy": "meteor/10",
+  "sliceDependencies": {
+    "browser.json": {
+      "files": {
+        "/Users/rafaelkaufmann/reinventa/packages/jquery-gantt/package.js": "eb7337d93b59be1439393c5da9e422c3f671d5db",
+        "/Users/rafaelkaufmann/reinventa/packages/jquery-gantt/lib/jquery.fn.gantt.js": "1f60921c7ba735e8fac1a495a18bc156f14a698b"
+      },
+      "directories": []
+    },
+    "os.json": {
+      "files": {
+        "/Users/rafaelkaufmann/reinventa/packages/jquery-gantt/package.js": "eb7337d93b59be1439393c5da9e422c3f671d5db"
+      },
+      "directories": []
+    },
+    "tests.browser.json": {
+      "files": {
+        "/Users/rafaelkaufmann/reinventa/packages/jquery-gantt/package.js": "eb7337d93b59be1439393c5da9e422c3f671d5db"
+      },
+      "directories": []
+    },
+    "tests.os.json": {
+      "files": {
+        "/Users/rafaelkaufmann/reinventa/packages/jquery-gantt/package.js": "eb7337d93b59be1439393c5da9e422c3f671d5db"
+      },
+      "directories": []
+    }
+  },
+  "pluginDependencies": {
+    "files": {
+      "/Users/rafaelkaufmann/reinventa/packages/jquery-gantt/package.js": "eb7337d93b59be1439393c5da9e422c3f671d5db"
+    },
+    "directories": []
+  },
+  "pluginProviderPackages": {
+    "jquery-gantt": "/Users/rafaelkaufmann/reinventa/packages/jquery-gantt",
+    "meteor": "/Users/rafaelkaufmann/.meteor/packages/meteor/144d60bec6",
+    "jquery": "/Users/rafaelkaufmann/.meteor/packages/jquery/2ff5a27117"
+  },
+  "source": "/Users/rafaelkaufmann/reinventa/packages/jquery-gantt"
+}

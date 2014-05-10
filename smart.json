@@ -1,0 +1,8 @@
+{
+  "packages": {
+    "jquery-gantt": {
+      "path": "packages/jquery-gantt"
+    },
+    "bootstrap3-less": {}
+  }
+}
