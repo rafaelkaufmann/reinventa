@@ -28,6 +28,10 @@ suite('Tasks', function () {
 			done();
 		});
 	});
+
+	// test('Start<-end dependency')
+
+	// test('End<-end dependency')
 });
 
 suite('GANTT and task CRUD', function () {
@@ -70,4 +74,43 @@ suite('GANTT and task CRUD', function () {
 			done();
 		});
 	});
+
+	test('Filling out blank task form and clicking Create creates task', function (done, server, client) {
+
+		client.eval(function () {
+
+			waitForDOM('#new-task', function () {
+				var form = $('#new-task');
+
+				form.find('.name').val('Just created a task');
+				form.find('.done').val(false);
+				form.find('.active').val(true);
+				form.find('.from').val('2014-05-01 00:00:00');
+				form.find('.to')  .val('2014-05-30 00:00:00');
+
+				window.setTimeout(function () {
+					emit('taskSubmitted');
+				}. 500);
+			});
+
+		}).once('taskSubmitted', function () {
+			var task = Tasks.findOne({name: 'Just created a task'});
+			assert(task);
+
+			assert.equal(task.done, false);
+			assert.equal(task.active, true);
+			assert.equal(task.from, new Date('2014-05-01 00:00:00'));
+			assert.equal(task.to,   new Date('2014-05-30 00:00:00'));
+		})
+	});
+
+	// test('Filling out prefilled task form and clicking Edit edits task')
+
+	// test('Clicking on empty space on GANTT = new task')
+
+	// test('Clicking on task on GANTT = edit task')
+
+	// test('Setting start<-end dependency')
+
+	// test('Setting end<-end dependency')
 });
