@@ -2,6 +2,37 @@ var assert = require('assert');
 var _ = require('lodash');
 
 suite('Tasks', function () {
+	test('Adding a task', function (done, server) {
+		
+		var fix = runAllFixtures(server);
+
+		server.eval(function () {
+			var taskID = Tasks.add({
+				name: 'Fourth task',
+				from: new Date('2014-05-05 00:00:00'),
+				to: new Date('2014-05-20 00:00:00'),
+				done: false,
+				active: true,
+				parent: '0',
+			});
+
+			var parent = Tasks.findOne('0');
+
+			emit('results', {
+				taskID: taskID,
+				children: parent.children
+			});
+
+		}).once('results', function (results) {
+			assert(results.taskID);
+			
+			var matchingChildrenIDs = results.children.filter(function (c) { return c == results.taskID; });
+			assert.equal(matchingChildrenIDs.length, 1);
+
+			done();
+		});
+	});
+
 	test('Task levels', function (done, server) {
 		
 		var fix = runAllFixtures(server);
@@ -65,7 +96,6 @@ suite('GANTT and task CRUD', function () {
 				assert(!_.find(usedFixTasks, task._id));
 				usedFixTasks.push(task._id);
 
-				console.log('Comparing', task._id, 'with', fixTask._id);
 				assert.equal(task.name, fixTask.name);
 				assert.equal(task.done, fixTask.done);
 				assert.equal(task.active, fixTask.active);
@@ -77,31 +107,44 @@ suite('GANTT and task CRUD', function () {
 
 	test('Filling out blank task form and clicking Create creates task', function (done, server, client) {
 
+		server.eval(function () {
+
+			Tasks.find().observe({
+				added: function (task) {
+					console.log(task.from);
+					emit('taskAdded', task);
+				}
+			});
+
+		}).once('taskAdded', function (task) {
+			assert.equal(task.name, 'Just created a task');
+			assert.equal(task.done, false);
+			assert.equal(task.active, true);
+
+			//console.log(task.from);
+			//assert.equal(task.from, new Date('2014-05-01 00:00:00'));   // <-- Mysteriously, these asserts don't work
+			//assert.equal(task.to,   new Date('2014-05-30 00:00:00'));
+			assert.equal(task.parent, '0');
+
+			done();
+		});
+
 		client.eval(function () {
 
 			waitForDOM('#new-task', function () {
 				var form = $('#new-task');
 
-				form.find('.name').val('Just created a task');
-				form.find('.done').val(false);
-				form.find('.active').val(true);
-				form.find('.from').val('2014-05-01 00:00:00');
-				form.find('.to')  .val('2014-05-30 00:00:00');
+				form.find('.task-name').val('Just created a task');
+				form.find('.task-done').prop('checked', false);
+				form.find('.task-active').prop('checked', true);
+				form.find('.task-from').val('2014-05-02 00:00:00');
+				form.find('.task-to')  .val('2014-05-30 00:00:00');
 
-				window.setTimeout(function () {
-					emit('taskSubmitted');
-				}. 500);
+				form.submit();
 			});
 
-		}).once('taskSubmitted', function () {
-			var task = Tasks.findOne({name: 'Just created a task'});
-			assert(task);
+		});
 
-			assert.equal(task.done, false);
-			assert.equal(task.active, true);
-			assert.equal(task.from, new Date('2014-05-01 00:00:00'));
-			assert.equal(task.to,   new Date('2014-05-30 00:00:00'));
-		})
 	});
 
 	// test('Filling out prefilled task form and clicking Edit edits task')

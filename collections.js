@@ -14,3 +14,11 @@ Tasks = new Meteor.Collection('tasks', {
 		return task;
 	}
 });
+
+Tasks.add = function (data) {
+	var taskID = Tasks.insert(data);
+	if (data.parent) {
+		Tasks.update(data.parent, {$push: {children: taskID}});
+	}
+	return taskID;
+}

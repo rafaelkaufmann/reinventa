@@ -4,13 +4,6 @@ Template.ganttChart.rendered = function () {
 	});
 };
 
-Template.ganttChart.events({
-	'click input': function () {
-		if (typeof console !== 'undefined')
-			console.log("You pressed the button");
-	}
-});
-
 var defaultConfigs = {
 	scale: "weeks",
 	minScale: "days",
@@ -34,8 +27,8 @@ function renderChart(selector) {
 }
 
 function getChartData() {
-	var currentParentID = Session.get('currentParent') || '0';
-	var parent = Tasks.findOne('0');
+	var currentParentID = getCurrentParent();
+	var parent = Tasks.findOne(currentParentID);
 	if (!parent)
 		return [];
 	var children = parent.descendants();
