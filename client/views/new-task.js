@@ -2,16 +2,24 @@ Template.newTask.events({
 	'submit': function (e, tmpl) {
 		e.preventDefault();
 
+		var form = $(e.target);
+
 		var data = {
-			name: $('.task-name').val(),
-			description: $('.task-description').val(),
-			from: new Date($('.task-from').val()),
-			to: new Date($('.task-to').val()),
-			done: $('.task-done').prop('checked'),
-			active: $('.task-active').prop('checked'),
-			parent: getCurrentParent()
+			name: form.find('.task-name').val(),
+			description: form.find('.task-description').val(),
+			from: new Date(form.find('.task-from').val()),
+			to: new Date(form.find('.task-to').val()),
+			done: form.find('.task-done').prop('checked'),
+			active: form.find('.task-active').prop('checked')
 		};
 
-		Tasks.add(data);
+		var currentlyEditingTask = Session.get('currentlyEditingTask');
+		if (currentlyEditingTask) {
+			var n = Tasks.update(currentlyEditingTask, {$set: data});
+			console.log(n);
+		} else {
+			data.parent = getCurrentParent();
+			Tasks.add(data);
+		}
 	}
 });

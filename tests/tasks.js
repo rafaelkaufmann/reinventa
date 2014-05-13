@@ -111,7 +111,6 @@ suite('GANTT and task CRUD', function () {
 
 			Tasks.find().observe({
 				added: function (task) {
-					console.log(task.from);
 					emit('taskAdded', task);
 				}
 			});
@@ -147,7 +146,48 @@ suite('GANTT and task CRUD', function () {
 
 	});
 
-	// test('Filling out prefilled task form and clicking Edit edits task')
+	test('Filling out prefilled task form and clicking Edit edits task', function (done, server, client) {
+
+		var fix = runAllFixtures(server);
+
+		server.eval(function () {
+
+			Tasks.find().observe({
+				changed: function (task) {
+					emit('taskChanged', task);
+				}
+			});
+
+		}).once('taskChanged', function (task) {
+			assert.equal(task.name, 'Just edited a task');
+			assert.equal(task.parent, '0');
+
+			done();
+		});
+
+		client.eval(function () {
+
+			Session.set('currentlyEditingTask', '1');
+
+			waitForDOM('#new-task', function () {
+				var form = $('#new-task');
+
+				form.find('.task-name').val('Just edited a task');
+
+				form.submit();
+			});
+
+		});
+
+	});
+
+	// test('Clicking on blank space in GANTT clears task form and currentlyEditingTask')
+
+	// test('Clicking on non-blank space in GANTT fills task form and currentlyEditingTask')
+
+	// test('Possible alternative parents for task are listed on form')
+
+	// test('Clicking on Delete deletes task')
 
 	// test('Clicking on empty space on GANTT = new task')
 
@@ -156,4 +196,6 @@ suite('GANTT and task CRUD', function () {
 	// test('Setting start<-end dependency')
 
 	// test('Setting end<-end dependency')
+
+	// test('Drag-and-drop on GANTT changes parent')
 });
